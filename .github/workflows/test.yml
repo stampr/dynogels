@@ -25,10 +25,6 @@ jobs:
       - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_STAMPR_PACKAGES }}" > ./.npmrc
       - run: echo "@stampr:registry=https://npm.pkg.github.com" >> ./.npmrc
       - run: npm ci
-      # make sure tests pass
-      - run: wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz -O /tmp/dynamodb_local_latest.tar.gz
-      - run: tar -xzf /tmp/dynamodb_local_latest.tar.gz -C /tmp
-      - run: java -Xmx256m -Djava.library.path=/tmp/DynamoDBLocal_lib -jar /tmp/DynamoDBLocal.jar -inMemory &
-      - run: sleep 2
+      - run: npm run ddbinstall
       - run: npm run ci
       - run: npm run coveralls

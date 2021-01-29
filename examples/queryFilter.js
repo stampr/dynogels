@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../index');
+const dynogels = require('../lib/index');
 const util = require('util');
 const _ = require('lodash');
 const Joi = require('joi');

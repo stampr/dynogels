@@ -9,3 +9,4 @@ covreporter/
 coverage/
 .tern-port
 .idea
+dynamodb_local_latest

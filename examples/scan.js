@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../index');
+const dynogels = require('../lib/index');
 const util = require('util');
 const _ = require('lodash');
 const AWS = dynogels.AWS;
@@ -57,20 +57,20 @@ const runScans = () => {
 
   // Scan with key condition
   Account.scan()
-  .where('email').beginsWith('test5')
-  .exec(printResults);
+    .where('email').beginsWith('test5')
+    .exec(printResults);
 
   // Run scan returning only email and created attributes
   // also returns consumed capacity the scan took
   Account.scan()
-  .where('email').gte('f@example.com')
-  .attributes(['email', 'createdAt'])
-  .returnConsumedCapacity()
-  .exec(printResults);
+    .where('email').gte('f@example.com')
+    .attributes(['email', 'createdAt'])
+    .returnConsumedCapacity()
+    .exec(printResults);
 
   Account.scan()
-  .where('scores').contains(2)
-  .exec(printResults);
+    .where('scores').contains(2)
+    .exec(printResults);
 };
 
 async.series([

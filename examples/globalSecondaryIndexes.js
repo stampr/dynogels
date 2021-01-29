@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../index');
+const dynogels = require('../lib/index');
 const _ = require('lodash');
 const util = require('util');
 const AWS = dynogels.AWS;
@@ -68,16 +68,16 @@ async.series([
 
   // Perform query against global secondary index
   GameScore
-  .query('Galaxy Invaders')
-  .usingIndex('GameTitleIndex')
-  .where('topScore').gt(0)
-  .descending()
-  .exec((err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Found', data.Count, 'items');
-      console.log(util.inspect(_.pluck(data.Items, 'attrs')));
-    }
-  });
+    .query('Galaxy Invaders')
+    .usingIndex('GameTitleIndex')
+    .where('topScore').gt(0)
+    .descending()
+    .exec((err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Found', data.Count, 'items');
+        console.log(util.inspect(_.pluck(data.Items, 'attrs')));
+      }
+    });
 });

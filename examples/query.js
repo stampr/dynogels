@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../index');
+const dynogels = require('../lib/index');
 const util = require('util');
 const _ = require('lodash');
 const async = require('async');
@@ -59,23 +59,23 @@ const runQueries = () => {
 
   // Query with rang key condition
   Account.query('Test 1')
-  .where('email').beginsWith('foo')
-  .exec(printResults);
+    .where('email').beginsWith('foo')
+    .exec(printResults);
 
   // Run query returning only email and created attributes
   // also returns consumed capacity query took
   Account.query('Test 2')
-  .where('email').gte('a@example.com')
-  .attributes(['email', 'createdAt'])
-  .returnConsumedCapacity()
-  .exec(printResults);
+    .where('email').gte('a@example.com')
+    .attributes(['email', 'createdAt'])
+    .returnConsumedCapacity()
+    .exec(printResults);
 
   // Run query against secondary index
   Account.query('Test 0')
-  .usingIndex('CreatedAtIndex')
-  .where('createdAt').lt(new Date().toISOString())
-  .descending()
-  .exec(printResults);
+    .usingIndex('CreatedAtIndex')
+    .where('createdAt').lt(new Date().toISOString())
+    .descending()
+    .exec(printResults);
 };
 
 async.series([

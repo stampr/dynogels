@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../index');
+const dynogels = require('../lib/index');
 const async = require('async');
 const _ = require('lodash');
 const AWS = dynogels.AWS;

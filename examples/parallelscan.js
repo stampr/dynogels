@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../index');
+const dynogels = require('../lib/index');
 const AWS = dynogels.AWS;
 const _ = require('lodash');
 const Joi = require('joi');
@@ -50,9 +50,9 @@ const runParallelScan = () => {
   const totalSegments = 8;
 
   Product.parallelScan(totalSegments)
-  .where('purchased').equals(true)
-  .attributes('price')
-  .exec(printInfo);
+    .where('purchased').equals(true)
+    .attributes('price')
+    .exec(printInfo);
 };
 
 async.series([
