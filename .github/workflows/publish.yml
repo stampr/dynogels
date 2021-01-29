@@ -27,6 +27,8 @@ jobs:
           fi
       - run: echo 'Publishing version - ${{env.PKG_VERSION}}'
       - run: npm --version; node --version
+      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PUBLIC_GH_STAMPR_PACKAGES }}" > ./.npmrc
+      - run: echo "@stampr:registry=https://npm.pkg.github.com" >> ./.npmrc
       - run: npm ci
       # make sure tests pass
       - run: npm run ddbinstall
