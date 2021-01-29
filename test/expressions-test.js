@@ -233,29 +233,7 @@ describe('expressions', () => {
     it('should return single REMOVE action', () => {
       const updates = {
         id: 'foobar',
-        email: null,
-      };
-
-      const result = expressions.serializeUpdateExpression(schema, updates);
-
-      expect(result.expressions).to.eql({
-        SET: [],
-        ADD: [],
-        REMOVE: ['#email'],
-        DELETE: [],
-      });
-
-      expect(result.values).to.eql({});
-
-      expect(result.attributeNames).to.eql({
-        '#email': 'email'
-      });
-    });
-
-    it('should return single REMOVE action when value is set to empty string', () => {
-      const updates = {
-        id: 'foobar',
-        email: '',
+        email: Symbol.for('dynogels.remove'),
       };
 
       const result = expressions.serializeUpdateExpression(schema, updates);

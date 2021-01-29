@@ -1,5 +1,9 @@
 'use strict';
 
+process.env.AWS_ACCESS_KEY_ID = 'AKID';
+process.env.AWS_SECRET_ACCESS_KEY = 'SECRET';
+process.env.AWS_REGION = 'us-east-1';
+
 const dynogels = require('../../lib/index');
 const chai = require('chai');
 const expect = chai.expect;
@@ -396,12 +400,12 @@ describe('Dynogels Integration Tests', function () {
       });
     });
 
-    it('should remove settings attribute from user record', done => {
+    it('should not remove settings attribute from user record', done => {
       User.update({ id: '123456789', settings: null }, (err, acc) => {
         expect(err).to.not.exist;
         expect(acc).to.exist;
 
-        expect(acc.get()).to.have.keys(['id', 'email', 'age', 'roles', 'acceptedTerms', 'things']);
+        expect(acc.get()).to.have.keys(['id', 'settings', 'email', 'age', 'roles', 'acceptedTerms', 'things']);
         return done();
       });
     });

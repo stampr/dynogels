@@ -26,5 +26,4 @@ jobs:
       - run: echo "@stampr:registry=https://npm.pkg.github.com" >> ./.npmrc
       - run: npm ci
       - run: npm run ddbinstall
-      - run: npm run ci
-      - run: npm run coveralls
+      - run: npm test

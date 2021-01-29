@@ -14,7 +14,6 @@
     "lint": "eslint .",
     "pretest": "npm run ddbstart",
     "test": "exitcode=0 make test || exitcode=$?; npm run ddbstop; exit $exitcode",
-    "ci": "make coverage",
     "coveralls": "cat coverage/lcov.info | coveralls",
     "upgrade": "npm-check --update"
   },
