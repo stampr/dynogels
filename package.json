@@ -1,19 +1,23 @@
 {
-  "name": "dynogels",
-  "version": "9.1.0",
+  "name": "@stampr/dynogels",
+  "version": "9.2.0",
   "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
   "contributors": [
     "Clarkie <andrew.t.clarke@gmail.com> (http://clarkie.io)"
   ],
   "description": "DynamoDB data mapper",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "eslint .",
     "test": "make test",
     "ci": "make coverage",
-    "coveralls": "cat coverage/lcov.info | coveralls"
+    "coveralls": "cat coverage/lcov.info | coveralls",
+    "upgrade": "npm-check --update"
   },
-  "repository": "git://github.com/clarkie/dynogels.git",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stampr/dynogels.git"
+  },
   "keywords": [
     "datamapper",
     "DynamoDB",
@@ -22,26 +26,27 @@
     "amazon",
     "nosql"
   ],
-  "engines": {
-    "node": ">=4"
-  },
   "license": "MIT",
   "dependencies": {
     "async": "2.5.0",
-    "aws-sdk": "^2.408.0",
+    "aws-sdk": "^2.833.0",
     "joi": "11.3.4",
     "lodash": "^4.17.15",
     "uuid": "3.1.0"
   },
   "devDependencies": {
-    "chai": "4.1.2",
-    "coveralls": "3.0.0",
+    "chai": "^4.2.0",
+    "coveralls": "^3.1.0",
     "eslint": "^2.13.1",
     "eslint-config-airbnb-base": "^3.0.1",
     "eslint-plugin-import": "^1.11.1",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
     "mocha": "4.0.1",
+    "npm-check": "^5.9.2",
     "sinon": "4.0.1"
-  }
+  },
+  "files": [
+    "lib/"
+  ]
 }
