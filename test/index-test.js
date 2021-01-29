@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../index');
+const dynogels = require('../lib/index');
 const AWS = require('aws-sdk');
 const helper = require('./test-helper');
 const Table = require('../lib/table');

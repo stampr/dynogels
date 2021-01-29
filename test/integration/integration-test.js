@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../../index');
+const dynogels = require('../../lib/index');
 const chai = require('chai');
 const expect = chai.expect;
 const async = require('async');
@@ -50,7 +50,7 @@ internals.loadSeedData = callback => {
       async.times(10, (n, next) => {
         const director = { firstName: 'Steven', lastName: `Spielberg the ${n}`, titles: ['Producer', 'Writer', 'Director'] };
         const actors = [
-        { firstName: 'Tom', lastName: 'Hanks', titles: ['Producer', 'Actor', 'Soundtrack'] }
+          { firstName: 'Tom', lastName: 'Hanks', titles: ['Producer', 'Actor', 'Soundtrack'] }
         ];
 
         const tags = [`tag ${n}`];
@@ -580,75 +580,75 @@ describe('Dynogels Integration Tests', function () {
 
     it('should return tweets using secondaryIndex', done => {
       Tweet.query('userid-1')
-      .usingIndex('PublishedDateTimeIndex')
-      .consistentRead(true)
-      .descending()
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .usingIndex('PublishedDateTimeIndex')
+        .consistentRead(true)
+        .descending()
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        let prev;
-        _.each(data.Items, t => {
-          expect(t.get('UserId')).to.eql('userid-1');
+          let prev;
+          _.each(data.Items, t => {
+            expect(t.get('UserId')).to.eql('userid-1');
 
-          const published = t.get('PublishedDateTime');
+            const published = t.get('PublishedDateTime');
 
-          if (prev) {
-            expect(published < prev).to.be.true;
-          }
+            if (prev) {
+              expect(published < prev).to.be.true;
+            }
 
-          prev = published;
+            prev = published;
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return tweets using secondaryIndex and date object', done => {
       const oneMinAgo = new Date(new Date().getTime() - 60 * 1000);
 
       Tweet.query('userid-1')
-      .usingIndex('PublishedDateTimeIndex')
-      .where('PublishedDateTime').gt(oneMinAgo)
-      .descending()
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .usingIndex('PublishedDateTimeIndex')
+        .where('PublishedDateTime').gt(oneMinAgo)
+        .descending()
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        let prev;
-        _.each(data.Items, t => {
-          expect(t.get('UserId')).to.eql('userid-1');
+          let prev;
+          _.each(data.Items, t => {
+            expect(t.get('UserId')).to.eql('userid-1');
 
-          const published = t.get('PublishedDateTime');
+            const published = t.get('PublishedDateTime');
 
-          if (prev) {
-            expect(published < prev).to.be.true;
-          }
+            if (prev) {
+              expect(published < prev).to.be.true;
+            }
 
-          prev = published;
+            prev = published;
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return tweets that match filters', done => {
       Tweet.query('userid-1')
-      .filter('num').between(4, 8)
-      .filter('tag').exists()
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .filter('num').between(4, 8)
+        .filter('tag').exists()
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, t => {
-          expect(t.get('UserId')).to.eql('userid-1');
-          expect(t.get('num')).to.be.above(3);
-          expect(t.get('num')).to.be.below(9);
-          expect(t.get('tag')).to.exist;
+          _.each(data.Items, t => {
+            expect(t.get('UserId')).to.eql('userid-1');
+            expect(t.get('num')).to.be.above(3);
+            expect(t.get('num')).to.be.below(9);
+            expect(t.get('tag')).to.exist;
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return tweets that match exists filter', done => {
@@ -686,38 +686,38 @@ describe('Dynogels Integration Tests', function () {
 
     it('should return tweets that match expression filters', done => {
       Tweet.query('userid-1')
-      .filterExpression('#num BETWEEN :low AND :high AND attribute_exists(#tag)')
-      .expressionAttributeValues({ ':low': 4, ':high': 8 })
-      .expressionAttributeNames({ '#num': 'num', '#tag': 'tag' })
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .filterExpression('#num BETWEEN :low AND :high AND attribute_exists(#tag)')
+        .expressionAttributeValues({ ':low': 4, ':high': 8 })
+        .expressionAttributeNames({ '#num': 'num', '#tag': 'tag' })
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, t => {
-          expect(t.get('UserId')).to.eql('userid-1');
-          expect(t.get('num')).to.be.above(3);
-          expect(t.get('num')).to.be.below(9);
-          expect(t.get('tag')).to.exist;
+          _.each(data.Items, t => {
+            expect(t.get('UserId')).to.eql('userid-1');
+            expect(t.get('num')).to.be.above(3);
+            expect(t.get('num')).to.be.below(9);
+            expect(t.get('tag')).to.exist;
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return tweets with projection expression', done => {
       Tweet.query('userid-1')
-      .projectionExpression('#con, UserId')
-      .expressionAttributeNames({ '#con': 'content' })
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .projectionExpression('#con, UserId')
+        .expressionAttributeNames({ '#con': 'content' })
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, t => {
-          expect(t.get()).to.have.keys(['content', 'UserId']);
+          _.each(data.Items, t => {
+            expect(t.get()).to.have.keys(['content', 'UserId']);
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return all tweets from user', done => {
@@ -795,49 +795,49 @@ describe('Dynogels Integration Tests', function () {
 
     it('should return users older than 18', done => {
       User.scan()
-      .where('age').gt(18)
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .where('age').gt(18)
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, u => {
-          expect(u.get('age')).to.be.above(18);
+          _.each(data.Items, u => {
+            expect(u.get('age')).to.be.above(18);
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return users matching multiple filters', done => {
       User.scan()
-      .where('age').between(18, 22)
-      .where('email').beginsWith('test1')
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .where('age').between(18, 22)
+        .where('email').beginsWith('test1')
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, u => {
-          expect(u.get('age')).to.be.within(18, 22);
-          expect(u.get('email')).to.match(/^test1.*/);
+          _.each(data.Items, u => {
+            expect(u.get('age')).to.be.within(18, 22);
+            expect(u.get('email')).to.match(/^test1.*/);
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return users contains admin role', done => {
       User.scan()
-      .where('roles').contains('admin')
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .where('roles').contains('admin')
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, u => {
-          expect(u.get('roles')).to.include('admin');
+          _.each(data.Items, u => {
+            expect(u.get('roles')).to.include('admin');
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return users using stream interface', done => {
@@ -860,20 +860,20 @@ describe('Dynogels Integration Tests', function () {
 
     it('should return users that match expression filters', done => {
       User.scan()
-      .filterExpression('#age BETWEEN :low AND :high AND begins_with(#email, :e)')
-      .expressionAttributeValues({ ':low': 18, ':high': 22, ':e': 'test1' })
-      .expressionAttributeNames({ '#age': 'age', '#email': 'email' })
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .filterExpression('#age BETWEEN :low AND :high AND begins_with(#email, :e)')
+        .expressionAttributeValues({ ':low': 18, ':high': 22, ':e': 'test1' })
+        .expressionAttributeNames({ '#age': 'age', '#email': 'email' })
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, u => {
-          expect(u.get('age')).to.be.within(18, 22);
-          expect(u.get('email')).to.match(/^test1.*/);
+          _.each(data.Items, u => {
+            expect(u.get('age')).to.be.within(18, 22);
+            expect(u.get('email')).to.match(/^test1.*/);
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return users between ages', done => {
@@ -911,18 +911,18 @@ describe('Dynogels Integration Tests', function () {
 
     it('should return users with projection expression', done => {
       User.scan()
-      .projectionExpression('age, email, #roles')
-      .expressionAttributeNames({ '#roles': 'roles' })
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .projectionExpression('age, email, #roles')
+        .expressionAttributeNames({ '#roles': 'roles' })
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, u => {
-          expect(u.get()).to.have.keys(['age', 'email', 'roles']);
+          _.each(data.Items, u => {
+            expect(u.get()).to.have.keys(['age', 'email', 'roles']);
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should load all users with limit', done => {
@@ -993,17 +993,17 @@ describe('Dynogels Integration Tests', function () {
 
     it('should return users older than 18', done => {
       User.parallelScan(4)
-      .where('age').gt(18)
-      .exec((err, data) => {
-        expect(err).to.not.exist;
-        expect(data.Items).to.have.length.above(0);
+        .where('age').gt(18)
+        .exec((err, data) => {
+          expect(err).to.not.exist;
+          expect(data.Items).to.have.length.above(0);
 
-        _.each(data.Items, u => {
-          expect(u.get('age')).to.be.above(18);
+          _.each(data.Items, u => {
+            expect(u.get('age')).to.be.above(18);
+          });
+
+          return done();
         });
-
-        return done();
-      });
     });
 
     it('should return users using stream interface', done => {

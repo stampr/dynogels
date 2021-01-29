@@ -1,6 +1,6 @@
 'use strict';
 
-const dynogels = require('../../index');
+const dynogels = require('../../lib/index');
 const chai = require('chai');
 const expect = chai.expect;
 const _ = require('lodash');
@@ -413,8 +413,10 @@ describe('Update Tables Integration Tests', function () {
 
         const idx = _.first(globalIndexes);
         expect(idx.IndexName).to.eql('PublishedDateTimeIndex');
-        expect(idx.KeySchema).to.eql([{ AttributeName: 'UserId', KeyType: 'HASH' },
-                                      { AttributeName: 'PublishedDateTime', KeyType: 'RANGE' }]);
+        expect(idx.KeySchema).to.eql([
+          { AttributeName: 'UserId', KeyType: 'HASH' },
+          { AttributeName: 'PublishedDateTime', KeyType: 'RANGE' }
+        ]);
         expect(idx.Projection).to.eql({ ProjectionType: 'ALL' });
 
         return done();

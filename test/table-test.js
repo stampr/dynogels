@@ -1103,8 +1103,8 @@ describe('table', () => {
 
       serializer.buildKey.returns(request.Key);
       serializer.deserializeItem.withArgs(returnedAttributes).returns(
-        { email: 'test@test.com', name: 'Foo Bar'
-      });
+        { email: 'test@test.com', name: 'Foo Bar' }
+      );
 
       table.destroy('test@test.com', { ReturnValues: 'ALL_OLD' }, (err, item) => {
         serializer.buildKey.calledWith('test@test.com', null, s).should.be.true;
@@ -1148,8 +1148,8 @@ describe('table', () => {
 
       serializer.buildKey.returns(request.Key);
       serializer.deserializeItem.withArgs(returnedAttributes).returns(
-        { email: 'test@test.com', name: 'Foo Bar'
-      });
+        { email: 'test@test.com', name: 'Foo Bar' }
+      );
 
       table.destroy('test@test.com', 'Foo Bar', (err, item) => {
         serializer.buildKey.calledWith('test@test.com', 'Foo Bar', s).should.be.true;
@@ -1194,8 +1194,8 @@ describe('table', () => {
 
       serializer.buildKey.returns(request.Key);
       serializer.deserializeItem.withArgs(returnedAttributes).returns(
-        { email: 'test@test.com', name: 'Foo Bar'
-      });
+        { email: 'test@test.com', name: 'Foo Bar' }
+      );
 
       table.destroy('test@test.com', 'Foo Bar', { ReturnValues: 'ALL_OLD' }, (err, item) => {
         serializer.buildKey.calledWith('test@test.com', 'Foo Bar', s).should.be.true;
