@@ -370,12 +370,12 @@ describe('Dynogels Integration Tests', function () {
       );
     });
 
-    it('should remove name attribute from user record when set to empty string', done => {
+    it('should not remove name attribute from user record when set to empty string', done => {
       User.update({ id: '9999', name: '' }, (err, acc) => {
         expect(err).to.not.exist;
         expect(acc).to.exist;
 
-        expect(acc.get()).to.have.keys(['id', 'email', 'age', 'roles', 'acceptedTerms']);
+        expect(acc.get()).to.have.keys(['id', 'name', 'email', 'age', 'roles', 'acceptedTerms']);
         return done();
       });
     });
