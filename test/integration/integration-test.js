@@ -196,7 +196,7 @@ describe('Dynogels Integration Tests', function () {
       }, (err, acc) => {
         expect(err).to.not.exist;
         expect(acc).to.exist;
-        expect(acc.get()).to.have.keys(['id', 'email', 'age', 'roles', 'acceptedTerms', 'settings']);
+        expect(acc.get()).to.have.keys(['id', 'name', 'email', 'age', 'roles', 'acceptedTerms', 'settings']);
         return done();
       });
     });
