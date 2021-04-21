@@ -557,6 +557,30 @@ describe('table', () => {
       });
     });
 
+    // this is the same test as above but with the novalidate flag
+    it('should allow bypassing validation', done => {
+      const config = {
+        hashKey: 'email',
+        schema: {
+          email: Joi.string(),
+          name: Joi.string()
+        }
+      };
+
+      const s = new Schema(config);
+
+      table = new Table('accounts', s, realSerializer, docClient, logger);
+
+      table.create({ email: 'test@test.com', name: [1, 2, 3] }, { [Symbol.for('dynogels.novalidate')]: true }, (err, account) => {
+        expect(err).to.exist;
+        expect(err).to.match(/ValidationError/);
+        expect(account).to.not.exist;
+
+        sinon.assert.notCalled(docClient.put);
+        done();
+      });
+    });
+
     it('should create item with condition expression on hashkey when overwrite flag is false', done => {
       const config = {
         hashKey: 'email',
