@@ -11,10 +11,9 @@
     "ddbinstall": "rm -fr dynamodb_local_latest && mkdir dynamodb_local_latest && cd dynamodb_local_latest && wget https://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz && tar xvzf dynamodb_local_latest.tar.gz",
     "ddbstart": "java -Djava.library.path=./dynamodb_local_latest/DynamoDBLocal_lib -jar ./dynamodb_local_latest/DynamoDBLocal.jar -inMemory -sharedDb &",
     "ddbstop": "ps -ef | grep DynamoDBLocal.jar | grep -v grep | awk '{print $2}' | xargs kill -9",
-    "lint": "eslint .",
+    "lint": "eslint --fix .",
     "pretest": "npm run ddbstart",
     "test": "exitcode=0 make test || exitcode=$?; npm run ddbstop; exit $exitcode",
-    "coveralls": "cat coverage/lcov.info | coveralls",
     "upgrade": "npm-check --update"
   },
   "repository": {
@@ -31,23 +30,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "async": "2.5.0",
-    "aws-sdk": "^2.833.0",
-    "joi": "11.3.4",
-    "lodash": "^4.17.15",
-    "uuid": "3.1.0"
+    "async": "2.x",
+    "aws-sdk": "^2.889.0",
+    "joi": "11.x",
+    "lodash": "^4.17.21",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "coveralls": "^3.1.0",
-    "eslint": "^2.13.1",
-    "eslint-config-airbnb-base": "^3.0.1",
-    "eslint-plugin-import": "^1.11.1",
-    "istanbul": "^0.4.4",
-    "jscoverage": "^0.6.0",
-    "mocha": "4.0.1",
+    "chai": "^4.3.4",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "mocha": "^8.3.2",
     "npm-check": "^5.9.2",
-    "sinon": "4.0.1"
+    "sinon": "^10.0.0"
   },
   "files": [
     "lib/"

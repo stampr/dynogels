@@ -2,7 +2,8 @@
 
 const Schema = require('../lib/schema');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const Joi = require('joi');
 const _ = require('lodash');
 const sinon = require('sinon');
@@ -173,7 +174,9 @@ describe('schema', () => {
       const config = {
         hashKey: 'foo',
         indexes: [
-          { hashKey: 'foo', rangeKey: 'bar', type: 'local', name: 'LocalBarIndex' }
+          {
+            hashKey: 'foo', rangeKey: 'bar', type: 'local', name: 'LocalBarIndex'
+          }
         ]
       };
 
@@ -212,7 +215,9 @@ describe('schema', () => {
       const config = {
         hashKey: 'foo',
         indexes: [
-          { hashKey: 'bar', rangeKey: 'date', type: 'local', name: 'LocalDateIndex' }
+          {
+            hashKey: 'bar', rangeKey: 'date', type: 'local', name: 'LocalDateIndex'
+          }
         ]
       };
 
@@ -352,7 +357,6 @@ describe('schema', () => {
       });
     });
   });
-
 
   describe('#uuid', () => {
     it('should set as uuid with default uuid function', () => {

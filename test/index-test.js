@@ -5,7 +5,8 @@ const AWS = require('aws-sdk');
 const helper = require('./test-helper');
 const Table = require('../lib/table');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const Joi = require('joi');
 const sinon = require('sinon');
 
@@ -31,7 +32,7 @@ describe('dynogels', () => {
 
     it('should throw when using old api', () => {
       expect(() => {
-        dynogels.define('Account', schema => {
+        dynogels.define('Account', (schema) => {
           schema.String('email', { hashKey: true });
         });
       }).to.throw(/define no longer accepts schema callback, migrate to new api/);
@@ -111,7 +112,6 @@ describe('dynogels', () => {
       Account.docClient.should.eq(docClient);
     });
 
-
     it('should globally set dynamodb driver for all models', () => {
       const Account = dynogels.define('Account', { hashKey: 'id' });
       const Post = dynogels.define('Post', { hashKey: 'id' });
@@ -170,7 +170,7 @@ describe('dynogels', () => {
 
       dynamodb.createTable.yields(null, null);
 
-      dynogels.createTables(err => {
+      dynogels.createTables((err) => {
         expect(err).to.not.exist;
         expect(dynamodb.describeTable.calledThrice).to.be.true;
         return done();
@@ -180,7 +180,7 @@ describe('dynogels', () => {
       clock.tick(1200);
     });
 
-    it('should return error', done => {
+    it('should return error', (done) => {
       const Account = dynogels.define('Account', { hashKey: 'id' });
 
       const dynamodb = Account.docClient.service;
@@ -188,14 +188,14 @@ describe('dynogels', () => {
 
       dynamodb.createTable.yields(new Error('Fail'), null);
 
-      dynogels.createTables(err => {
+      dynogels.createTables((err) => {
         expect(err).to.exist;
         expect(dynamodb.describeTable.calledOnce).to.be.true;
         return done();
       });
     });
 
-    it('should create model without callback', done => {
+    it('should create model without callback', (done) => {
       const Account = dynogels.define('Account', { hashKey: 'id' });
       const dynamodb = Account.docClient.service;
 
@@ -223,7 +223,7 @@ describe('dynogels', () => {
       return done();
     });
 
-    it('should return error when waiting for table to become active', done => {
+    it('should return error when waiting for table to become active', (done) => {
       const Account = dynogels.define('Account', { hashKey: 'id' });
       const dynamodb = Account.docClient.service;
 
@@ -238,7 +238,7 @@ describe('dynogels', () => {
 
       dynamodb.createTable.yields(null, null);
 
-      dynogels.createTables(err => {
+      dynogels.createTables((err) => {
         expect(err).to.exist;
         expect(dynamodb.describeTable.calledThrice).to.be.true;
         return done();

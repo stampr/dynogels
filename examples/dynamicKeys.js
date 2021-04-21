@@ -1,7 +1,8 @@
 'use strict';
 
 const dynogels = require('../lib/index');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const Joi = require('joi');
 const async = require('async');
 const util = require('util');
@@ -36,7 +37,7 @@ const printResults = (err, resp) => {
 
 dynogels.createTables({
   'example-Account': { readCapacity: 1, writeCapacity: 10 },
-}, err => {
+}, (err) => {
   if (err) {
     console.log('Error creating tables', err);
     process.exit(1);

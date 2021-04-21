@@ -1,11 +1,12 @@
 'use strict';
 
-const dynogels = require('../lib/index');
 const util = require('util');
 const _ = require('lodash');
 const Joi = require('joi');
 const async = require('async');
-const AWS = dynogels.AWS;
+const dynogels = require('../lib/index');
+
+const { AWS } = dynogels;
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
 
@@ -21,11 +22,13 @@ const Account = dynogels.define('example-query-filter', {
   },
 
   indexes: [
-    { hashKey: 'name', rangeKey: 'createdAt', type: 'local', name: 'CreatedAtIndex' }
+    {
+      hashKey: 'name', rangeKey: 'createdAt', type: 'local', name: 'CreatedAtIndex'
+    }
   ]
 });
 
-const printResults = msg => (err, resp) => {
+const printResults = (msg) => (err, resp) => {
   console.log('----------------------------------------------------------------------');
   if (err) {
     console.log(`${msg} - Error running query`, err);
@@ -42,19 +45,20 @@ const printResults = msg => (err, resp) => {
   console.log('----------------------------------------------------------------------');
 };
 
-const loadSeedData = callback => {
+const loadSeedData = (callback) => {
   callback = callback || _.noop;
 
   async.times(30, (n, next) => {
     const roles = n % 3 === 0 ? ['admin', 'editor'] : ['user'];
-    Account.create({ email: `test${n}@example.com`, name: `Test ${n % 3}`, age: n, roles: roles }, next);
+    Account.create({
+      email: `test${n}@example.com`, name: `Test ${n % 3}`, age: n, roles: roles
+    }, next);
   }, callback);
 };
 
 const runFilterQueries = () => {
   // Basic equals filter
   Account.query('Test 1').filter('age').equals(4).exec(printResults('Equals Filter'));
-
 
   // between filter
   Account.query('Test 1').filter('age').between(5, 10).exec(printResults('Between Filter'));
@@ -76,7 +80,7 @@ const runFilterQueries = () => {
 async.series([
   async.apply(dynogels.createTables.bind(dynogels)),
   loadSeedData
-], err => {
+], (err) => {
   if (err) {
     console.log('error', err);
     process.exit(1);

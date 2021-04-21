@@ -1,7 +1,8 @@
 'use strict';
 
 const dynogels = require('../lib/index');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const Joi = require('joi');
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
@@ -29,19 +30,19 @@ Account.before('update', (data, next) => {
   return next(null, data);
 });
 
-Account.after('create', item => {
+Account.after('create', (item) => {
   console.log('Account created', item.get());
 });
 
-Account.after('update', item => {
+Account.after('update', (item) => {
   console.log('Account updated', item.get());
 });
 
-Account.after('destroy', item => {
+Account.after('destroy', (item) => {
   console.log('Account destroyed', item.get());
 });
 
-dynogels.createTables(err => {
+dynogels.createTables((err) => {
   if (err) {
     console.log('Error creating tables', err);
     process.exit(1);

@@ -1,11 +1,12 @@
 'use strict';
 
-const dynogels = require('../lib/index');
 const util = require('util');
 const _ = require('lodash');
 const async = require('async');
 const Joi = require('joi');
-const AWS = dynogels.AWS;
+const dynogels = require('../lib/index');
+
+const { AWS } = dynogels;
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
 
@@ -39,7 +40,7 @@ const printResults = (err, data) => {
   console.log('----------------------------------------------------------------------');
 };
 
-const loadSeedData = callback => {
+const loadSeedData = (callback) => {
   callback = callback || _.noop;
 
   async.times(10, (n, next) => {
@@ -60,7 +61,9 @@ const loadSeedData = callback => {
       tags.push('Comedy');
     }
 
-    Movie.create({ title: `Movie ${n}`, releaseYear: 2001 + n, actors: actors, director: director, tags: tags }, next);
+    Movie.create({
+      title: `Movie ${n}`, releaseYear: 2001 + n, actors: actors, director: director, tags: tags
+    }, next);
   }, callback);
 };
 
@@ -101,7 +104,7 @@ const runExample = () => {
 async.series([
   async.apply(dynogels.createTables.bind(dynogels)),
   loadSeedData
-], err => {
+], (err) => {
   if (err) {
     console.log('error', err);
     process.exit(1);

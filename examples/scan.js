@@ -3,7 +3,8 @@
 const dynogels = require('../lib/index');
 const util = require('util');
 const _ = require('lodash');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const async = require('async');
 const Joi = require('joi');
 
@@ -38,15 +39,16 @@ const printResults = (err, resp) => {
   console.log('----------------------------------------------------------------------');
 };
 
-const loadSeedData = callback => {
+const loadSeedData = (callback) => {
   callback = callback || _.noop;
 
   async.times(30, (n, next) => {
     const scores = n % 5 === 0 ? [3, 4, 5] : [1, 2];
-    Account.create({ email: `test${n}@example.com`, name: `Test ${n % 3}`, age: n, scores: scores }, next);
+    Account.create({
+      email: `test${n}@example.com`, name: `Test ${n % 3}`, age: n, scores: scores
+    }, next);
   }, callback);
 };
-
 
 const runScans = () => {
   // Basic scan against table
@@ -76,7 +78,7 @@ const runScans = () => {
 async.series([
   async.apply(dynogels.createTables.bind(dynogels)),
   loadSeedData
-], err => {
+], (err) => {
   if (err) {
     console.log('error', err);
     process.exit(1);

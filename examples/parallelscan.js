@@ -1,7 +1,8 @@
 'use strict';
 
 const dynogels = require('../lib/index');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const _ = require('lodash');
 const Joi = require('joi');
 const async = require('async');
@@ -37,7 +38,7 @@ const printInfo = (err, resp) => {
   console.log('Average purchased price', totalPrices / resp.Count);
 };
 
-const loadSeedData = callback => {
+const loadSeedData = (callback) => {
   callback = callback || _.noop;
 
   async.times(30, (n, next) => {
@@ -58,7 +59,7 @@ const runParallelScan = () => {
 async.series([
   async.apply(dynogels.createTables.bind(dynogels)),
   loadSeedData
-], err => {
+], (err) => {
   if (err) {
     console.log('error', err);
     process.exit(1);
@@ -66,4 +67,3 @@ async.series([
 
   runParallelScan();
 });
-

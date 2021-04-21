@@ -1,8 +1,9 @@
 'use strict';
 
-const dynogels = require('../lib/index');
 const Joi = require('joi');
-const AWS = dynogels.AWS;
+const dynogels = require('../lib/index');
+
+const { AWS } = dynogels;
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
 
@@ -26,7 +27,7 @@ Account.findByAgeRange = (low, high) => {
     .where('age').lte(high)
     .loadAll()
     .exec((err, data) => {
-      data.Items.forEach(account => {
+      data.Items.forEach((account) => {
         account.sayHello();
       });
     });

@@ -1,7 +1,8 @@
 'use strict';
 
 const dynogels = require('../lib/index');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const Joi = require('joi');
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
@@ -15,7 +16,9 @@ dynogels.define('example-Account', {
     age: Joi.number()
   },
   indexes: [
-    { hashKey: 'name', rangeKey: 'age', type: 'local', name: 'NameAgeIndex' },
+    {
+      hashKey: 'name', rangeKey: 'age', type: 'local', name: 'NameAgeIndex'
+    },
   ]
 });
 
@@ -49,7 +52,7 @@ dynogels.createTables({
       streamViewType: 'NEW_IMAGE'
     }
   }
-}, err => {
+}, (err) => {
   if (err) {
     console.log('Error creating tables', err);
   } else {

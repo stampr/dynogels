@@ -1,8 +1,9 @@
 'use strict';
 
-const serializer = require('../lib/serializer');
 const chai = require('chai');
-const expect = chai.expect;
+const serializer = require('../lib/serializer');
+
+const { expect } = chai;
 const Schema = require('../lib/schema');
 const helper = require('./test-helper');
 const Joi = require('joi');
@@ -222,9 +223,9 @@ describe('Serializer', () => {
 
       const s = new Schema(config);
 
-      const item = serializer.serializeItem(s, { data: 'hello', bin: new Buffer('binary') });
+      const item = serializer.serializeItem(s, { data: 'hello', bin: Buffer.from('binary') });
 
-      item.should.eql({ data: new Buffer('hello'), bin: new Buffer('binary') });
+      item.should.eql({ data: Buffer.from('hello'), bin: Buffer.from('binary') });
     });
 
     it('should serialize number attribute with value zero', () => {
@@ -241,7 +242,6 @@ describe('Serializer', () => {
 
       item.should.eql({ age: 0 });
     });
-
 
     it('should serialize boolean attribute', () => {
       const config = {
@@ -367,7 +367,7 @@ describe('Serializer', () => {
 
       const item = serializer.serializeItem(s, { data: ['hello', 'world'] });
 
-      const binarySet = docClient.createSet([new Buffer('hello'), new Buffer('world')]);
+      const binarySet = docClient.createSet([Buffer.from('hello'), Buffer.from('world')]);
       item.data.type.should.eql('Binary');
       item.data.values.should.eql(binarySet.values);
     });
@@ -385,7 +385,7 @@ describe('Serializer', () => {
 
       const item = serializer.serializeItem(s, { data: 'hello' });
 
-      const binarySet = docClient.createSet([new Buffer('hello')]);
+      const binarySet = docClient.createSet([Buffer.from('hello')]);
       item.data.type.should.eql('Binary');
       item.data.values.should.eql(binarySet.values);
     });
@@ -499,7 +499,6 @@ describe('Serializer', () => {
       item.data.nicks.type.should.eql('String');
       item.data.nicks.values.should.eql(stringSet.values);
     });
-
 
     it('should return empty when serializing null value', () => {
       const config = {

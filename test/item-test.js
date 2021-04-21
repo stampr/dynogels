@@ -1,10 +1,11 @@
 'use strict';
 
+const chai = require('chai');
 const Item = require('../lib/item');
 const Table = require('../lib/table');
 const Schema = require('../lib/schema');
-const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const helper = require('./test-helper');
 const serializer = require('../lib/serializer');
 const Joi = require('joi');
@@ -37,7 +38,7 @@ describe('item', () => {
   });
 
   describe('#save', () => {
-    it('should return error', done => {
+    it('should return error', (done) => {
       table.docClient.put.yields(new Error('fail'));
 
       const attrs = { num: 1, name: 'foo' };
@@ -53,7 +54,7 @@ describe('item', () => {
   });
 
   describe('#update', () => {
-    it('should return item', done => {
+    it('should return item', (done) => {
       table.docClient.update.yields(null, { Attributes: { num: 1, name: 'foo' } });
 
       const attrs = { num: 1, name: 'foo' };
@@ -67,8 +68,7 @@ describe('item', () => {
       });
     });
 
-
-    it('should return error', done => {
+    it('should return error', (done) => {
       table.docClient.update.yields(new Error('fail'));
 
       const attrs = { num: 1, name: 'foo' };
@@ -82,7 +82,7 @@ describe('item', () => {
       });
     });
 
-    it('should return null', done => {
+    it('should return null', (done) => {
       table.docClient.update.yields(null, {});
 
       const attrs = { num: 1, name: 'foo' };

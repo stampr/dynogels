@@ -1,11 +1,12 @@
 'use strict';
 
-const dynogels = require('../lib/index');
 const util = require('util');
 const _ = require('lodash');
 const async = require('async');
 const Joi = require('joi');
-const AWS = dynogels.AWS;
+const dynogels = require('../lib/index');
+
+const { AWS } = dynogels;
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
 
@@ -20,7 +21,9 @@ const Account = dynogels.define('example-query', {
   },
 
   indexes: [
-    { hashKey: 'name', rangeKey: 'createdAt', type: 'local', name: 'CreatedAtIndex' }
+    {
+      hashKey: 'name', rangeKey: 'createdAt', type: 'local', name: 'CreatedAtIndex'
+    }
   ]
 });
 
@@ -41,7 +44,7 @@ const printResults = (err, resp) => {
   console.log('----------------------------------------------------------------------');
 };
 
-const loadSeedData = callback => {
+const loadSeedData = (callback) => {
   callback = callback || _.noop;
 
   async.times(25, (n, next) => {
@@ -81,7 +84,7 @@ const runQueries = () => {
 async.series([
   async.apply(dynogels.createTables.bind(dynogels)),
   loadSeedData
-], err => {
+], (err) => {
   if (err) {
     console.log('error', err);
     process.exit(1);

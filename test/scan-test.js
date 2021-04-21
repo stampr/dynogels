@@ -1,11 +1,12 @@
 'use strict';
 
+const _ = require('lodash');
+const chai = require('chai');
 const helper = require('./test-helper');
 const Schema = require('../lib/schema');
 const Scan = require('../lib/scan');
-const _ = require('lodash');
-const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const Joi = require('joi');
 
 chai.should();
@@ -13,7 +14,7 @@ chai.should();
 const internals = {};
 
 internals.assertScanFilter = (scan, expected) => {
-  const conds = _.map(scan.request.ScanFilter, c => c.format());
+  const conds = _.map(scan.request.ScanFilter, (c) => c.format());
 
   if (!_.isArray(expected)) {
     expected = [expected];
@@ -43,7 +44,9 @@ describe('Scan', () => {
         email: Joi.string(),
         created: Joi.date()
       },
-      indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+      indexes: [{
+        hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+      }]
     };
 
     schema = new Schema(config);
@@ -51,7 +54,7 @@ describe('Scan', () => {
   });
 
   describe('#exec', () => {
-    it('should call run scan on table', done => {
+    it('should call run scan on table', (done) => {
       table.runScan.yields(null, { ConsumedCapacity: { CapacityUnits: 5, TableName: 'accounts' }, Count: 10, ScannedCount: 12 });
       serializer.serializeItem.returns({ name: { S: 'tim' } });
 
@@ -64,7 +67,7 @@ describe('Scan', () => {
       });
     });
 
-    it('should return LastEvaluatedKey', done => {
+    it('should return LastEvaluatedKey', (done) => {
       table.runScan.yields(null, { LastEvaluatedKey: { name: 'tim' }, Count: 10, ScannedCount: 12 });
       serializer.serializeItem.returns({ name: { S: 'tim' } });
 
@@ -78,7 +81,7 @@ describe('Scan', () => {
       });
     });
 
-    it('should return error', done => {
+    it('should return error', (done) => {
       table.runScan.yields(new Error('Fail'));
 
       new Scan(table, serializer).exec((err, results) => {
@@ -88,7 +91,7 @@ describe('Scan', () => {
       });
     });
 
-    it('should run scan after encountering a retryable exception', done => {
+    it('should run scan after encountering a retryable exception', (done) => {
       const err = new Error('RetryableException');
       err.retryable = true;
 
@@ -114,7 +117,6 @@ describe('Scan', () => {
 
       scan.request.Limit.should.equal(10);
     });
-
 
     it('should throw when limit is zero', () => {
       const scan = new Scan(table, serializer);
@@ -188,7 +190,6 @@ describe('Scan', () => {
     });
   });
 
-
   describe('#where', () => {
     let scan;
 
@@ -203,7 +204,9 @@ describe('Scan', () => {
           scores: Schema.types.numberSet(),
           data: Joi.object()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       schema = new Schema(config);
@@ -369,7 +372,6 @@ describe('Scan', () => {
       scan.options.loadAll.should.be.true;
     });
   });
-
 
   describe('#filterExpression', () => {
     it('should set filter expression', () => {

@@ -3,7 +3,8 @@
 const dynogels = require('../lib/index');
 const _ = require('lodash');
 const util = require('util');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const Joi = require('joi');
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
@@ -38,14 +39,14 @@ const printScanResults = (err, data) => {
   if (err) {
     console.log('got scan error', err);
   } else if (data.Items) {
-    const items = _.map(data.Items, d => d.get());
+    const items = _.map(data.Items, (d) => d.get());
     console.log('scan finished, got ', util.inspect(items, { showHidden: false, depth: null }));
   } else {
     console.log('scan returned empty result set');
   }
 };
 
-dynogels.createTables(err => {
+dynogels.createTables((err) => {
   if (err) {
     console.log('failed to create table', err);
   }
@@ -56,7 +57,10 @@ dynogels.createTables(err => {
 
   // Create an account
   const params = {
-    email: 'test11@example.com', name: 'test 11', age: 21, scores: [22, 55, 44],
+    email: 'test11@example.com',
+    name: 'test 11',
+    age: 21,
+    scores: [22, 55, 44],
     list: ['a', 'b', 'c', 1, 2, 3],
     settings: { nickname: 'tester' }
   };
@@ -64,7 +68,7 @@ dynogels.createTables(err => {
   Account.create(params, (err, acc) => {
     printAccountInfo(err, acc);
 
-    acc.set({ name: 'Test 11', age: 25 }).update(err => {
+    acc.set({ name: 'Test 11', age: 25 }).update((err) => {
       console.log('account updated', err, acc.get());
     });
   });

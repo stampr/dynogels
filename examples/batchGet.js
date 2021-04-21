@@ -3,7 +3,8 @@
 const dynogels = require('../lib/index');
 const async = require('async');
 const _ = require('lodash');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const Joi = require('joi');
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
@@ -29,19 +30,21 @@ const printAccountInfo = (err, acc) => {
   }
 };
 
-const loadSeedData = callback => {
+const loadSeedData = (callback) => {
   callback = callback || _.noop;
 
   async.times(15, (n, next) => {
     const roles = n % 3 === 0 ? ['admin', 'editor'] : ['user'];
-    Account.create({ email: `test${n}@example.com`, name: `Test ${n % 3}`, age: n, roles: roles }, next);
+    Account.create({
+      email: `test${n}@example.com`, name: `Test ${n % 3}`, age: n, roles: roles
+    }, next);
   }, callback);
 };
 
 async.series([
   async.apply(dynogels.createTables.bind(dynogels)),
   loadSeedData
-], err => {
+], (err) => {
   if (err) {
     console.log('error', err);
     process.exit(1);
@@ -49,21 +52,21 @@ async.series([
 
   // Get two accounts at once
   Account.getItems(['test1@example.com', 'test2@example.com'], (err, accounts) => {
-    accounts.forEach(acc => {
+    accounts.forEach((acc) => {
       printAccountInfo(null, acc);
     });
   });
 
   // Same as above but a strongly consistent read is used
   Account.getItems(['test3@example.com', 'test4@example.com'], { ConsistentRead: true }, (err, accounts) => {
-    accounts.forEach(acc => {
+    accounts.forEach((acc) => {
       printAccountInfo(null, acc);
     });
   });
 
   // Get two accounts, but only fetching the age attribute
   Account.getItems(['test5@example.com', 'test6@example.com'], { AttributesToGet: ['age'] }, (err, accounts) => {
-    accounts.forEach(acc => {
+    accounts.forEach((acc) => {
       printAccountInfo(null, acc);
     });
   });

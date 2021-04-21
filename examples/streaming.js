@@ -1,8 +1,9 @@
 'use strict';
 
-const dynogels = require('../lib/index');
 const Joi = require('joi');
-const AWS = dynogels.AWS;
+const dynogels = require('../lib/index');
+
+const { AWS } = dynogels;
 
 AWS.config.loadFromPath(`${process.env.HOME}/.ec2/credentials.json`);
 
@@ -19,7 +20,7 @@ const Product = dynogels.define('example-streaming-Product', {
 
 const printStream = (msg, stream) => {
   let count = 0;
-  stream.on('error', err => {
+  stream.on('error', (err) => {
     console.log(`error ${msg}`, err);
   });
 

@@ -6,10 +6,11 @@ process.env.AWS_REGION = 'us-east-1';
 
 const dynogels = require('../../lib/index');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const _ = require('lodash');
-const helper = require('../test-helper');
 const Joi = require('joi');
+const helper = require('../test-helper');
 
 chai.should();
 
@@ -24,7 +25,7 @@ describe('Create Tables Integration Tests', function () {
     dynogels.reset();
   });
 
-  it('should create table with hash key', done => {
+  it('should create table with hash key', (done) => {
     const Model = dynogels.define('dynogels-create-table-test', {
       hashKey: 'id',
       tableName: helper.randomName('dynogels-createtable-Accounts'),
@@ -48,7 +49,7 @@ describe('Create Tables Integration Tests', function () {
     });
   });
 
-  it('should create table with hash and range key', done => {
+  it('should create table with hash and range key', (done) => {
     const Model = dynogels.define('dynogels-createtable-rangekey', {
       hashKey: 'name',
       rangeKey: 'age',
@@ -80,7 +81,7 @@ describe('Create Tables Integration Tests', function () {
     });
   });
 
-  it('should create table with local secondary index', done => {
+  it('should create table with local secondary index', (done) => {
     const Model = dynogels.define('dynogels-createtable-rangekey', {
       hashKey: 'name',
       rangeKey: 'age',
@@ -92,8 +93,12 @@ describe('Create Tables Integration Tests', function () {
         time: Joi.date()
       },
       indexes: [
-        { hashKey: 'name', rangeKey: 'nick', type: 'local', name: 'NickIndex' },
-        { hashKey: 'name', rangeKey: 'time', type: 'local', name: 'TimeIndex' },
+        {
+          hashKey: 'name', rangeKey: 'nick', type: 'local', name: 'NickIndex'
+        },
+        {
+          hashKey: 'name', rangeKey: 'time', type: 'local', name: 'TimeIndex'
+        },
       ]
     });
 
@@ -138,7 +143,7 @@ describe('Create Tables Integration Tests', function () {
     });
   });
 
-  it('should create table with local secondary index with custom projection', done => {
+  it('should create table with local secondary index with custom projection', (done) => {
     const Model = dynogels.define('dynogels-createtable-local-proj', {
       hashKey: 'name',
       rangeKey: 'age',
@@ -187,7 +192,7 @@ describe('Create Tables Integration Tests', function () {
     });
   });
 
-  it('should create table with global index', done => {
+  it('should create table with global index', (done) => {
     const Model = dynogels.define('dynogels-createtable-global', {
       hashKey: 'name',
       rangeKey: 'age',
@@ -230,7 +235,7 @@ describe('Create Tables Integration Tests', function () {
     });
   });
 
-  it('should create table with global index with optional settings', done => {
+  it('should create table with global index with optional settings', (done) => {
     const Model = dynogels.define('dynogels-createtable-global', {
       hashKey: 'name',
       rangeKey: 'age',
@@ -281,7 +286,7 @@ describe('Create Tables Integration Tests', function () {
     });
   });
 
-  it('should create table with global and local indexes', done => {
+  it('should create table with global and local indexes', (done) => {
     const Model = dynogels.define('dynogels-createtable-both-indexes', {
       hashKey: 'name',
       rangeKey: 'age',
@@ -293,10 +298,16 @@ describe('Create Tables Integration Tests', function () {
         wins: Joi.number()
       },
       indexes: [
-        { hashKey: 'name', rangeKey: 'nick', type: 'local', name: 'NameNickIndex' },
-        { hashKey: 'name', rangeKey: 'wins', type: 'local', name: 'NameWinsIndex' },
+        {
+          hashKey: 'name', rangeKey: 'nick', type: 'local', name: 'NameNickIndex'
+        },
+        {
+          hashKey: 'name', rangeKey: 'wins', type: 'local', name: 'NameWinsIndex'
+        },
         { hashKey: 'nick', type: 'global', name: 'GlobalNickIndex' },
-        { hashKey: 'age', rangeKey: 'wins', type: 'global', name: 'GlobalAgeWinsIndex' }
+        {
+          hashKey: 'age', rangeKey: 'wins', type: 'global', name: 'GlobalAgeWinsIndex'
+        }
       ]
     });
 
@@ -366,7 +377,7 @@ describe('Update Tables Integration Tests', function () {
   let Tweet;
   let tableName;
 
-  before(done => {
+  before((done) => {
     dynogels.dynamoDriver(helper.realDynamoDB());
 
     tableName = helper.randomName('dynogels-updateTable-Tweets');
@@ -390,7 +401,7 @@ describe('Update Tables Integration Tests', function () {
     dynogels.reset();
   });
 
-  it('should add global secondary index', done => {
+  it('should add global secondary index', (done) => {
     Tweet = dynogels.define('dynogels-update-table-test', {
       hashKey: 'UserId',
       rangeKey: 'TweetID',
@@ -402,11 +413,13 @@ describe('Update Tables Integration Tests', function () {
         PublishedDateTime: Joi.date().default(Date.now, 'now')
       },
       indexes: [
-        { hashKey: 'UserId', rangeKey: 'PublishedDateTime', type: 'global', name: 'PublishedDateTimeIndex' }
+        {
+          hashKey: 'UserId', rangeKey: 'PublishedDateTime', type: 'global', name: 'PublishedDateTimeIndex'
+        }
       ]
     });
 
-    Tweet.updateTable(err => {
+    Tweet.updateTable((err) => {
       expect(err).to.not.exist;
 
       Tweet.describeTable((err, data) => {

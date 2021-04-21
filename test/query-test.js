@@ -1,12 +1,13 @@
 'use strict';
 
+const chai = require('chai');
 const helper = require('./test-helper');
 const Schema = require('../lib/schema');
-const Query = require('../lib//query');
+const Query = require('../lib/query');
 const Serializer = require('../lib/serializer');
 const Table = require('../lib/table');
-const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const assert = require('assert');
 const Joi = require('joi');
 
@@ -25,7 +26,7 @@ describe('Query', () => {
   });
 
   describe('#exec', () => {
-    it('should run query against table', done => {
+    it('should run query against table', (done) => {
       const config = {
         hashKey: 'name',
         rangeKey: 'email',
@@ -46,7 +47,7 @@ describe('Query', () => {
       });
     });
 
-    it('should return error', done => {
+    it('should return error', (done) => {
       const config = {
         hashKey: 'name',
         rangeKey: 'email',
@@ -68,7 +69,7 @@ describe('Query', () => {
       });
     });
 
-    it('should stream error', done => {
+    it('should stream error', (done) => {
       const config = {
         hashKey: 'name',
         rangeKey: 'email',
@@ -86,7 +87,7 @@ describe('Query', () => {
 
       const stream = new Query('tim', t, Serializer).exec();
 
-      stream.on('error', err => {
+      stream.on('error', (err) => {
         expect(err).to.exist;
         return done();
       });
@@ -96,7 +97,7 @@ describe('Query', () => {
       });
     });
 
-    it('should stream data after handling retryable error', done => {
+    it('should stream data after handling retryable error', (done) => {
       const config = {
         hashKey: 'name',
         rangeKey: 'email',
@@ -243,7 +244,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -290,7 +293,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -322,7 +327,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -351,7 +358,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -378,7 +387,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -404,7 +415,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -425,7 +438,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -456,7 +471,9 @@ describe('Query', () => {
           email: Joi.string(),
           created: Joi.date()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);
@@ -551,7 +568,9 @@ describe('Query', () => {
           age: Joi.number(),
           data: Joi.object()
         },
-        indexes: [{ hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex' }]
+        indexes: [{
+          hashKey: 'name', rangeKey: 'created', type: 'local', name: 'CreatedIndex'
+        }]
       };
 
       table.schema = new Schema(config);

@@ -1,7 +1,8 @@
 'use strict';
 
 const dynogels = require('../lib/index');
-const AWS = dynogels.AWS;
+
+const { AWS } = dynogels;
 const Joi = require('joi');
 
 dynogels.dynamoDriver(new AWS.DynamoDB({
@@ -22,14 +23,16 @@ const Account = dynogels.define('example-Account', {
 
 dynogels.createTables({
   'example-Account': { readCapacity: 1, writeCapacity: 10 },
-}, err => {
+}, (err) => {
   if (err) {
     console.log('Error creating tables', err);
     process.exit(1);
   }
 
   const n = 2001;
-  const account = { AccountId: `${n}`, name: `Account ${n}`, email: `account${n}@gmail.com`, age: n };
+  const account = {
+    AccountId: `${n}`, name: `Account ${n}`, email: `account${n}@gmail.com`, age: n
+  };
 
   Account.create(account, (err, a1) => {
     console.log(err || a1.attrs);
