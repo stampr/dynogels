@@ -203,6 +203,25 @@ describe('expressions', () => {
       });
     });
 
+    it('should strip int zero from ADD to avoid aws errors', () => {
+      const updates = {
+        id: 'foobar',
+        age: { $add: 0 }
+      };
+
+      const result = expressions.serializeUpdateExpression(schema, updates);
+      expect(result.expressions).to.eql({
+        SET: [],
+        ADD: [],
+        REMOVE: [],
+        DELETE: [],
+      });
+
+      expect(result.values).to.eql({});
+
+      expect(result.attributeNames).to.eql({});
+    });
+
     it('should return single DELETE action', () => {
       const updates = {
         id: 'foobar',
