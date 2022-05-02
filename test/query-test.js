@@ -97,7 +97,8 @@ describe('Query', () => {
       });
     });
 
-    it('should stream data after handling retryable error', (done) => {
+    it('should stream data after handling retryable error', function (done) {
+      this.timeout(5000);
       const config = {
         hashKey: 'name',
         rangeKey: 'email',

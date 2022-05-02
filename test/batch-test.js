@@ -117,7 +117,8 @@ describe('Batch', () => {
       });
     });
 
-    it('should not modify passed in keys', (done) => {
+    it('should not modify passed in keys', function (done) {
+      this.timeout(5000);
       const keys = _.map(_.range(300), (num) => {
         const key = { email: `test${num}@test.com`, name: `Test ${num}` };
         serializer.buildKey.withArgs(key).returns({ email: { S: key.email }, name: { S: key.name } });
