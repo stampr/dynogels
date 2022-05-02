@@ -515,6 +515,25 @@ describe('Serializer', () => {
 
       item.should.eql({});
     });
+
+    it('should support objects with property named "length" #11', () => {
+      const config = {
+        hashKey: 'email',
+        schema: {
+          email: Joi.string(),
+          dimensions: Joi.object({
+            length: Joi.number(),
+            width: Joi.number(),
+          }),
+        }
+      };
+
+      const s = new Schema(config);
+
+      const item = serializer.serializeItem(s, { dimensions: { length: 10, width: 20 } });
+
+      item.should.deep.eql({ dimensions: { length: 10, width: 20 } });
+    });
   });
 
   describe('#deserializeItem', () => {
@@ -744,6 +763,25 @@ describe('Serializer', () => {
       item.ages.Action.should.eql('DELETE');
       item.ages.Value.type.should.eql('Number');
       item.ages.Value.values.should.eql(numberSet.values);
+    });
+
+    it('should serialize object with property named "length" #11', () => {
+      const config = {
+        hashKey: 'foo',
+        schema: {
+          foo: Joi.string(),
+          dimensions: Joi.object({
+            length: Joi.number(),
+            width: Joi.number(),
+          }),
+        }
+      };
+
+      const s = new Schema(config);
+
+      const item = serializer.serializeItemForUpdate(s, 'PUT', { dimensions: { length: 10, width: 20 } });
+
+      item.should.eql({ dimensions: { Action: 'PUT', Value: { length: 10, width: 20 } } });
     });
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@stampr/dynogels",
-  "version": "9.4.1",
+  "version": "9.4.2",
   "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
   "contributors": [
     "Clarkie <andrew.t.clarke@gmail.com> (http://clarkie.io)"
@@ -14,7 +14,7 @@
     "lint": "eslint --fix .",
     "pretest": "npm run ddbstart",
     "test": "exitcode=0 make test || exitcode=$?; npm run ddbstop; exit $exitcode",
-    "upgrade": "npm-check --update"
+    "upgrade": "npx npm-check --update"
   },
   "repository": {
     "type": "git",
@@ -30,21 +30,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "async": "2.x",
-    "aws-sdk": "^2.1105.0",
+    "async": "^3.2.3",
+    "aws-sdk": "^2.1125.0",
     "joi": "11.x",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "chai": "^4.3.6",
-    "eslint": "^7.24.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.25.4",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "minimist": "^1.2.6",
-    "mocha": "^8.3.2",
-    "npm-check": "^5.9.2",
-    "sinon": "^10.0.0"
+    "mocha": "^10.0.0",
+    "sinon": "^13.0.2"
   },
   "files": [
     "lib/"
