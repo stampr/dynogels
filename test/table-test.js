@@ -337,43 +337,6 @@ describe('table', () => {
       });
     });
 
-    // FIXME: this isn't working but it's the test and not the code
-    // it.only('should not omit empty strings', done => {
-    //   const config = {
-    //     hashKey: 'email',
-    //     schema: {
-    //       email: Joi.string(),
-    //       name: Joi.string().allow(''),
-    //       age: Joi.number()
-    //     }
-    //   };
-
-    //   const s = new Schema(config);
-
-    //   table = new Table('accounts', s, realSerializer, docClient, logger);
-
-    //   const request = {
-    //     TableName: 'accounts',
-    //     Item: {
-    //       email: 'test@test.com',
-    //       age: 2,
-    //     }
-    //   };
-
-    //   docClient.put.withArgs(request).yields(null, {});
-
-    //   table.create({ email: 'test@test.com', name: '', age: 2 }, (err, account) => {
-    //     expect(err).to.not.exist;
-    //     account.should.be.instanceof(Item);
-
-    //     account.get('email').should.equal('test@test.com');
-    //     account.get('age').should.equal(2);
-    //     account.get('name').should.equal('');
-
-    //     done();
-    //   });
-    // });
-
     it('should create item with createdAt timestamp', (done) => {
       const config = {
         hashKey: 'email',
@@ -685,6 +648,42 @@ describe('table', () => {
         done();
       });
     });
+
+    it('should create item with nested object that has property named "length" #11', (done) => {
+      const config = {
+        hashKey: 'email',
+        schema: {
+          email: Joi.string(),
+          dimensions: Joi.object({
+            length: Joi.number(),
+            width: Joi.number(),
+          }),
+        }
+      };
+
+      const s = new Schema(config);
+
+      table = new Table('accounts', s, realSerializer, docClient, logger);
+
+      const request = {
+        TableName: 'accounts',
+        Item: {
+          email: 'test@test.com',
+          dimensions: { length: 10, width: 20 },
+        }
+      };
+
+      docClient.put.withArgs(request).yields(null, {});
+
+      table.create({ email: 'test@test.com', dimensions: { length: 10, width: 20 } }, { overwrite: true }, (err, account) => {
+        account.should.be.instanceof(Item);
+
+        account.get('email').should.equal('test@test.com');
+        account.get('dimensions').should.deep.equal({ length: 10, width: 20 });
+
+        done();
+      });
+    });
   });
 
   describe('#update', () => {
@@ -961,6 +960,49 @@ describe('table', () => {
       table.update(item, (err, account) => {
         expect(err).to.exist;
         expect(account).to.not.exist;
+        done();
+      });
+    });
+
+    it('should support nested objects with property named "length" #11', (done) => {
+      const config = {
+        hashKey: 'email',
+        schema: {
+          email: Joi.string(),
+          dimensions: Joi.object({
+            length: Joi.number(),
+            width: Joi.number(),
+          }),
+        }
+      };
+
+      const s = new Schema(config);
+
+      table = new Table('accounts', s, realSerializer, docClient, logger);
+
+      const request = {
+        TableName: 'accounts',
+        Key: { email: 'test@test.com' },
+        ReturnValues: 'ALL_NEW',
+        UpdateExpression: 'SET #dimensions = :dimensions',
+        ExpressionAttributeValues: { ':dimensions': { length: 10, width: 20 } },
+        ExpressionAttributeNames: { '#dimensions': 'dimensions' }
+      };
+
+      const returnedAttributes = {
+        email: 'test@test.com',
+        dimensions: { length: 10, width: 20 },
+      };
+
+      docClient.update.withArgs(request).yields(null, { Attributes: returnedAttributes });
+
+      const item = { email: 'test@test.com', dimensions: { length: 10, width: 20 } };
+      table.update(item, (err, account) => {
+        account.should.be.instanceof(Item);
+
+        account.get('email').should.equal('test@test.com');
+        account.get('dimensions').should.deep.equal({ length: 10, width: 20 });
+
         done();
       });
     });
