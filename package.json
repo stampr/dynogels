@@ -32,7 +32,7 @@
   "dependencies": {
     "async": "^3.2.3",
     "aws-sdk": "^2.1125.0",
-    "joi": "11.x",
+    "joi": "17.x",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2"
   },
